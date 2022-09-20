@@ -8,7 +8,9 @@ const mealsEl = document.querySelector('#meals');
 const resultHeading = document.querySelector('#result-heading');
 const single_MealEl = document.querySelector('#single-meal');
 const errorMessage = document.querySelector('.message');
+
 //FUNCTIONS
+
 //DISPLAY ERROR MESSAGE
 const displayError = function (msg) {
   resultHeading.innerHTML = '';
@@ -78,6 +80,7 @@ const getMealById = async function (id) {
       );
     const meal = data.meals[0];
     displayMeal(meal);
+    single_MealEl.scrollIntoView({ behavior: 'smooth' });
   } catch (err) {
     displayError(err.message);
   }
