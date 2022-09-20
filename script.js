@@ -9,6 +9,11 @@ const resultHeading = document.querySelector('#result-heading');
 const single_MealEl = document.querySelector('#single-meal');
 const errorMessage = document.querySelector('.message');
 //FUNCTIONS
+//DISPLAY ERROR MESSAGE
+const displayError = function (msg) {
+  resultHeading.innerHTML = '';
+  errorMessage.innerHTML = `<h2>${msg}</h2>`;
+};
 //SEARCH MEALS BY NAME/KEYWORD
 const getMeal = async function (e) {
   try {
@@ -20,10 +25,10 @@ const getMeal = async function (e) {
     errorMessage.innerHTML = '';
 
     const keyword = searchInp.value;
-    if (!keyword) {
-      errorMessage.innerHTML = `<i class="fas fa-duotone fa-circle-exclamation"></i> Please enter your search term!`;
-      return;
-    }
+    if (!keyword)
+      throw new Error(
+        `<i class="fas fa-duotone fa-circle-exclamation"></i> Please enter your search term!`
+      );
 
     //AJAX CALL
     const res = await fetch(
@@ -33,9 +38,10 @@ const getMeal = async function (e) {
     resultHeading.innerHTML = `<h2>Search results for '${keyword}'</h2>`;
 
     if (!data.meals) {
-      resultHeading.innerHTML = `<p></p>No search results for this term. Try again!</p>`;
+      mealsEl.innerHTML = '';
+      searchInp.value = '';
       throw new Error(
-        `No meal found for this term:'${keyword}'! Try something else ;)`
+        `<i class="fas fa-duotone fa-circle-exclamation"></i> No search results for this term. Try again!`
       );
     }
 
@@ -55,7 +61,7 @@ const getMeal = async function (e) {
     //CLEAR SEARCH INPUT
     searchInp.value = '';
   } catch (err) {
-    console.error(err);
+    displayError(err.message);
   }
 };
 
@@ -66,12 +72,14 @@ const getMealById = async function (id) {
       `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
     );
     const data = await res.json();
-    if (!data.meals) throw new Error('Something wrong happened! Try again');
+    if (!data.meals)
+      throw new Error(
+        '<i class="fas fa-duotone fa-circle-exclamation"></i> Something wrong happened! Try again'
+      );
     const meal = data.meals[0];
-    console.log(meal);
     displayMeal(meal);
   } catch (err) {
-    console.error(err);
+    displayError(err.message);
   }
 };
 
@@ -80,12 +88,15 @@ const getRandomMeal = async function () {
   try {
     //clear meals container
     mealsEl.innerHTML = '';
-    errorMessage.innerHTML = '';
 
     const res = await fetch(
       `https://www.themealdb.com/api/json/v1/1/random.php`
     );
     const data = await res.json();
+    if (!data.meals)
+      throw new Error(
+        '<i class="fas fa-duotone fa-circle-exclamation"></i> Something wrong happened! Try again'
+      );
     const meal = data.meals[0];
     //change the heading text
     resultHeading.innerHTML = `<h2>Our suggestion for you is ${
@@ -93,7 +104,7 @@ const getRandomMeal = async function () {
     } : ${meal.strMeal}</h2>`;
     displayMeal(meal);
   } catch (err) {
-    console.error(err);
+    displayError(err);
   }
 };
 
@@ -120,8 +131,10 @@ const displayMeal = function (meal) {
 
   const markup = `
   <div class="single-meal">
-    <h1>${meal.strMeal}</h1>
-    <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
+    <h2>${meal.strMeal}</h2>
+    <img src="${meal.strMealThumb}" alt="${meal.strMeal}" href="#${
+    meal.idMeal
+  }" />
     <div class="single-meal-info">
       <p class = "meal-category">${meal.strCategory ? meal.strCategory : ''}</p>
       <p class = "meal-area">${meal.strArea ? meal.strArea : ''}</p>

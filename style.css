@@ -47,7 +47,7 @@ input[type='text'] {
 }
 
 .message {
-  margin: 10px;
+  margin-top: 20px;
   font-weight: 600;
 }
 
@@ -65,7 +65,7 @@ input[type='text'] {
 }
 
 #result-heading {
-  margin: 15px auto;
+  margin: 5px auto;
 }
 
 .meals {
@@ -181,7 +181,7 @@ input[type='text'] {
     margin: 0px auto;
   }
 }
-@media (max-width: 500px) {
+@media (max-width: 568px) {
   input[type='text'] {
     width: 100%;
   }
@@ -192,5 +192,13 @@ input[type='text'] {
   .meal {
     height: 300px;
     width: 300px;
+  }
+
+  .single-meal img {
+    width: 90%;
+  }
+
+  .single-meal ul li {
+    display: block;
   }
 }
