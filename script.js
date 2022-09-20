@@ -25,6 +25,7 @@ const getMeal = async function (e) {
     single_MealEl.innerHTML = '';
     resultHeading.innerHTML = '';
     errorMessage.innerHTML = '';
+    mealsEl.innerHTML = '';
 
     const keyword = searchInp.value;
     if (!keyword)
@@ -91,6 +92,7 @@ const getRandomMeal = async function () {
   try {
     //clear meals container
     mealsEl.innerHTML = '';
+    errorMessage.innerHTML = '';
 
     const res = await fetch(
       `https://www.themealdb.com/api/json/v1/1/random.php`
